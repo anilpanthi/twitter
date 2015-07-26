@@ -6,9 +6,10 @@ class UsersEditTest < ActionDispatch::IntegrationTest
  end
  test"unsucessfull edit " do
    log_in_as(@user)
-   #assert_template 'users/edit'
-   patch user_path(@user), user: {name: "", email: "foo@invalid.com", password: "foo", password_confirmation: "bar"}
-   #assert_template 'users/edit'
+   get edit_user_path(@user)
+   assert_template 'users/edit'
+   patch user_path(@user), user: {name: "", email: "user@invalid.com", password: "foo", password_confirmation: "bar"}
+   assert_template 'users/edit'
  end
  
  test "successful edit with friendly forwarding" do
@@ -19,8 +20,8 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     email = "foo@bar.com"
     patch user_path(@user), user: { name:  name,
                                     email: email,
-                                    password:              "foobar",
-                                    password_confirmation: "foobar" }
+                                    password:              "",
+                                    password_confirmation: "" }
     assert_not flash.empty?
     assert_redirected_to @user
     @user.reload
